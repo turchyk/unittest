@@ -1,6 +1,7 @@
 import unittest
 from selenium import webdriver
-from locators import Common, Main, Product, Cart, User
+from locators import Common, Product, Cart, User
+from page_objects import MainPage, UserPage
 
 
 class TestCase(unittest.TestCase):
@@ -17,17 +18,13 @@ class TestCase(unittest.TestCase):
         browser = self.driver
         browser.get('http://opencart/')
         # Click on the first element in the block featured
-        feature_product = browser.find_elements_by_css_selector(Main.featured.products['css'])[0]
-        product_name = feature_product.find_element_by_css_selector(Main.featured.names['css']).text
-        feature_product.click()
+        product_name = MainPage(browser).click_featured_product(1)
         # Click on the button on the Product page
         browser.find_element_by_css_selector(Product.add_to_wishlist['css']).click()
         # Click on the link in the alert-success block
         browser.find_element_by_css_selector(Common.alert.success.login['css']).click()
         # Login from the user authorization form
-        browser.find_element_by_css_selector(Common.user_login.email_input['css']).send_keys("test2@mail.ru")
-        browser.find_element_by_css_selector(Common.user_login.password_input['css']).send_keys("test")
-        browser.find_element_by_css_selector(Common.user_login.login_button['css']).click()
+        UserPage(browser).login_user(email="turchikz@gmail.com", password="0000")
         # Go to favorites section
         browser.find_element_by_css_selector(User.right_menu.wish_list['css']).click()
         # Checking the link with the text of the selected product
@@ -37,9 +34,7 @@ class TestCase(unittest.TestCase):
         browser = self.driver
         browser.get('http://opencart/')
         # Click on the first element in the block featured
-        feature_product = browser.find_elements_by_css_selector(Main.featured.products['css'])[0]
-        product_name = feature_product.find_element_by_css_selector(Main.featured.names['css']).text
-        feature_product.click()
+        product_name = MainPage(browser).click_featured_product(1)
         # Click on the button on the Product page
         browser.find_element_by_css_selector(Product.add_to_cart['css']).click()
         # Click on the link in the alert-success block
@@ -49,9 +44,7 @@ class TestCase(unittest.TestCase):
         # Click on the Checkout button on the cart page
         browser.find_element_by_css_selector(Cart.bottom_btn.checkout['css']).click()
         # Login from the user authorization form
-        browser.find_element_by_css_selector(Common.user_login.email_input['css']).send_keys("test2@mail.ru")
-        browser.find_element_by_css_selector(Common.user_login.password_input['css']).send_keys("test")
-        browser.find_element_by_css_selector(Common.user_login.login_button['css']).click()
+        UserPage(browser).login_user(email="turchikz@gmail.com", password="0000")
         # Waiting for the payment registration form to be displayed
         browser.find_elements_by_css_selector(User.paymnet_form.it['css'])
 
